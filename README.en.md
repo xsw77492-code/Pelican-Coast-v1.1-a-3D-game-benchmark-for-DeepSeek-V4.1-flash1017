@@ -5,7 +5,7 @@
 > On the surface, it is a pelican riding a bicycle into a golden-hour coastline.  
 > Under the hood, it is a **232 KB, zero-dependency, single-file capability test** — built, shipped, and tested in a real browser.
 
-[简体中文](README.md) · **English**
+[简体中文](README.md) · **English** · [GitHub repository](https://github.com/xsw77492-code/Pelican-Coast-v1.1-a-3D-game-benchmark-for-DeepSeek-V4.1-flash1017)
 
 <p align="center">
   <img alt="Model: DeepSeek-V4.1-flash1017" src="https://img.shields.io/badge/model-DeepSeek--V4.1--flash1017-4f6df5?style=flat-square">
@@ -65,8 +65,10 @@ Then open <http://localhost:8080/>.
 **GitHub Pages:** after pushing to GitHub, go to `Settings → Pages → Deploy from a branch`, choose `main` and `/ (root)`, then play at:
 
 ```text
-https://<your-username>.github.io/pelican-coast/
+https://xsw77492-code.github.io/Pelican-Coast-v1.1-a-3D-game-benchmark-for-DeepSeek-V4.1-flash1017/
 ```
+
+Once GitHub Pages is enabled, the game is playable there.
 
 > [!TIP]
 > Chrome or Edge with WebGL2 enabled gives the best experience.

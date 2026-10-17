@@ -5,7 +5,7 @@
 > 只看画面，它是一个日落海岸上的鹈鹕骑行游戏。  
 > 打开源码，它是一份 **232 KB、零依赖、零外部素材、经过真实浏览器测试** 的模型能力样本。
 
-[简体中文](README.md) · [English](README.en.md)
+[简体中文](README.md) · [English](README.en.md) · [GitHub 仓库](https://github.com/xsw77492-code/Pelican-Coast-v1.1-a-3D-game-benchmark-for-DeepSeek-V4.1-flash1017)
 
 <p align="center">
   <img alt="Model: DeepSeek-V4.1-flash1017" src="https://img.shields.io/badge/model-DeepSeek--V4.1--flash1017-4f6df5?style=flat-square">
@@ -65,10 +65,10 @@ python -m http.server 8080
 **GitHub Pages：** 推送到 GitHub 后，在 `Settings → Pages → Deploy from a branch` 选择 `main` 和 `/ (root)`，即可通过：
 
 ```text
-https://<你的用户名>.github.io/pelican-coast/
+https://xsw77492-code.github.io/Pelican-Coast-v1.1-a-3D-game-benchmark-for-DeepSeek-V4.1-flash1017/
 ```
 
-在线游玩。
+开启 Pages 后即可在线游玩。
 
 > [!TIP]
 > 用 Chrome / Edge 打开效果最佳，需要支持 WebGL2。
