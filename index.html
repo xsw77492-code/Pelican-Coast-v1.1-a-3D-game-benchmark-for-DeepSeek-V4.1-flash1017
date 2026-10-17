@@ -281,6 +281,72 @@
     background: rgba(255, 230, 198, .45);
   }
 
+  .combo-hud {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: baseline;
+    column-gap: 7px;
+    row-gap: 5px;
+    width: max-content;
+    min-width: 172px;
+    margin-top: 12px;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity .38s var(--ease-soft), transform .38s var(--ease);
+    pointer-events: none;
+    filter: drop-shadow(0 4px 15px rgba(22, 14, 18, .18));
+  }
+  .combo-hud.is-active { opacity: 1; transform: translateY(0); }
+  .combo-word {
+    font-family: var(--sans);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(255, 223, 170, .58);
+  }
+  .combo-number {
+    display: inline-block;
+    font-family: var(--numeric);
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -.035em;
+    color: #ffe0a4;
+    text-shadow: 0 0 18px rgba(255, 171, 106, .2);
+    font-variant-numeric: tabular-nums;
+  }
+  .combo-bonus {
+    font-family: var(--numeric);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .03em;
+    color: rgba(255, 199, 128, .8);
+    font-variant-numeric: tabular-nums;
+  }
+  .combo-meter {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 2px;
+    margin-top: 1px;
+    border-radius: 99px;
+    overflow: hidden;
+    background: rgba(255, 236, 210, .12);
+  }
+  .combo-fill {
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #ffd190, #ff9278);
+    box-shadow: 0 0 11px rgba(255, 173, 112, .36);
+    transition: width .16s linear;
+  }
+  .combo-hud.is-pulse .combo-number {
+    animation: comboPulse .38s var(--ease);
+  }
+
   .hud-right {
     display: flex;
     align-items: center;
@@ -1015,7 +1081,8 @@
     color: rgba(255, 239, 216, .45);
     letter-spacing: 0;
   }
-  .result-cell.is-wide strong { font-size: 31px; }
+  .result-cell.is-distance strong { font-size: 30px; }
+  .result-cell.is-distance strong small { font-size: 12px; }
   .result-cell.is-accent strong { color: #ffd39a; }
 
   .best-line {
@@ -1081,18 +1148,83 @@
     position: absolute;
     z-index: 9;
     left: 50%;
-    top: 62%;
+    top: 61%;
     transform: translate(-50%, 8px);
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 224, 175, .12);
+    border-radius: 999px;
+    background: rgba(22, 29, 43, .46);
+    box-shadow: 0 10px 28px rgba(15, 15, 24, .14);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     color: #ffe1a8;
     font-family: var(--numeric);
     font-size: 12px;
     letter-spacing: .12em;
-    text-shadow: 0 3px 18px rgba(81, 39, 15, .42);
+    text-shadow: 0 2px 12px rgba(49, 27, 13, .3);
     opacity: 0;
     pointer-events: none;
     white-space: nowrap;
   }
   .pickup-toast.is-showing { animation: toastFloat 1.1s var(--ease) forwards; }
+
+  .near-miss-toast {
+    position: absolute;
+    z-index: 9;
+    left: 50%;
+    top: 38%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 14px 8px 13px;
+    transform: translate(-50%, 10px);
+    border: 1px solid rgba(255, 216, 154, .2);
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(28, 34, 51, .64), rgba(18, 23, 36, .52));
+    box-shadow: 0 16px 40px rgba(11, 13, 23, .22), inset 0 1px rgba(255, 244, 222, .08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .near-miss-label {
+    font-family: var(--sans);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(255, 215, 154, .66);
+  }
+  .near-miss-label::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    margin-right: 6px;
+    border-radius: 50%;
+    vertical-align: 1px;
+    background: var(--gold);
+    box-shadow: 0 0 9px rgba(255, 197, 126, .9);
+  }
+  .near-miss-copy {
+    font-family: var(--display);
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: .08em;
+    color: #ffe6bd;
+  }
+  .near-miss-points {
+    padding-left: 8px;
+    border-left: 1px solid rgba(255, 218, 165, .18);
+    font-family: var(--numeric);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .02em;
+    color: #ffcb87;
+    font-variant-numeric: tabular-nums;
+  }
+  .near-miss-toast.is-showing { animation: nearMissFloat 1.05s var(--ease) forwards; }
 
   /* --------------------------------- Fallback ------------------------------- */
 
@@ -1146,6 +1278,17 @@
     72% { opacity: .9; transform: translate(-50%, -17px) scale(1); }
     100% { opacity: 0; transform: translate(-50%, -35px) scale(.98); }
   }
+  @keyframes nearMissFloat {
+    0% { opacity: 0; transform: translate(-50%, 12px) scale(.95); }
+    14% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+    70% { opacity: .92; transform: translate(-50%, -14px) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -30px) scale(.98); }
+  }
+  @keyframes comboPulse {
+    0% { transform: scale(1); color: #ffe0a4; }
+    35% { transform: scale(1.22); color: #fff5d9; text-shadow: 0 0 20px rgba(255, 186, 126, .7); }
+    100% { transform: scale(1); color: #ffe0a4; }
+  }
   @keyframes damageHit {
     0% { opacity: 0; }
     18% { opacity: 1; }
@@ -1195,6 +1338,15 @@
     .hud-distance { font-size: 36px; }
     .hud-substats { margin-top: 8px; gap: 8px; font-size: 8px; }
     .hud-substats b { font-size: 9px; }
+    .combo-hud { min-width: 142px; margin-top: 8px; column-gap: 6px; row-gap: 4px; }
+    .combo-number { font-size: 20px; }
+    .combo-word { font-size: 7px; letter-spacing: .18em; }
+    .combo-bonus { font-size: 8px; }
+    .near-miss-toast { top: 35%; gap: 7px; padding: 7px 11px; }
+    .near-miss-label { font-size: 7px; letter-spacing: .16em; }
+    .near-miss-copy { font-size: 12px; }
+    .near-miss-points { padding-left: 7px; font-size: 10px; }
+    .pickup-toast { top: 57%; padding: 5px 9px; font-size: 10px; }
     .hud-right { gap: 6px; }
     .vitals { height: 38px; padding: 0 11px; gap: 8px; }
     .heart { width: 12px; height: 12px; }
@@ -1215,7 +1367,7 @@
     .modal-card h2 { font-size: 35px; }
     .result-cell { padding: 11px 12px 10px; min-height: 60px; }
     .result-cell strong { font-size: 19px; }
-    .result-cell.is-wide strong { font-size: 28px; }
+    .result-cell.is-distance strong { font-size: 27px; }
     .pause-actions { gap: 10px; }
     .pause-actions .text-button { margin-top: 0; text-align: center; }
     .countdown-number { font-size: 118px; }
@@ -1270,7 +1422,7 @@
       <p class="intro-copy">
         晚风正好，海面被夕阳揉成了金色。<br>
         沿着海岸骑下去，躲开路障，收集小鱼，<br>
-        把今天骑得再远一点点。
+        贴着障碍擦身而过，让连击一路亮到日落尽头。
       </p>
       <div class="start-row">
         <button class="cta" id="startBtn" type="button">
@@ -1304,6 +1456,12 @@
           <span>SCORE <b id="scoreValue">0</b></span>
           <span class="dot"></span>
           <span>BEST <b id="bestHudValue">—</b></span>
+        </div>
+        <div class="combo-hud" id="comboHud" aria-label="连击">
+          <span class="combo-word">Combo</span>
+          <strong class="combo-number" id="comboValue">0</strong>
+          <span class="combo-bonus" id="comboBonus">×1.0</span>
+          <span class="combo-meter"><span class="combo-fill" id="comboFill"></span></span>
         </div>
       </div>
       <div class="hud-right">
@@ -1367,6 +1525,11 @@
   </div>
 
   <div class="pickup-toast" id="pickupToast" aria-live="polite"></div>
+  <div class="near-miss-toast" id="nearMissToast" aria-live="polite">
+    <span class="near-miss-label">Near Miss</span>
+    <span class="near-miss-copy">擦身而过</span>
+    <strong class="near-miss-points" id="nearMissPoints">+0</strong>
+  </div>
 
   <div class="modal-overlay" id="pauseScreen" aria-label="游戏暂停">
     <div class="modal-card">
@@ -1390,11 +1553,15 @@
       <h2 id="overTitle">今天骑到<em>这里</em></h2>
       <p class="modal-copy" id="overCopy">海风记住了你的车轮。<br>再来一局，看看日落之后还有什么。</p>
       <div class="result-grid">
-        <div class="result-cell is-wide">
+        <div class="result-cell is-distance">
           <span>This ride · 本局旅程</span>
           <strong><span id="finalDistance">0</span><small>m</small></strong>
         </div>
         <div class="result-cell is-accent">
+          <span>Best combo · 最高连击</span>
+          <strong id="finalCombo">0</strong>
+        </div>
+        <div class="result-cell">
           <span>Score · 得分</span>
           <strong id="finalScore">0</strong>
         </div>
@@ -1443,6 +1610,10 @@
     distanceValue: $("#distanceValue"),
     scoreValue: $("#scoreValue"),
     bestHudValue: $("#bestHudValue"),
+    comboHud: $("#comboHud"),
+    comboValue: $("#comboValue"),
+    comboBonus: $("#comboBonus"),
+    comboFill: $("#comboFill"),
     heartsWrap: $("#hearts"),
     hearts: $$(".heart"),
     fishCounter: $("#fishCounter"),
@@ -1459,6 +1630,8 @@
     countdownNumber: $("#countdownNumber"),
     countdownLabel: $("#countdownLabel"),
     pickupToast: $("#pickupToast"),
+    nearMissToast: $("#nearMissToast"),
+    nearMissPoints: $("#nearMissPoints"),
     pauseScreen: $("#pauseScreen"),
     pauseDistance: $("#pauseDistance"),
     pauseFish: $("#pauseFish"),
@@ -1469,6 +1642,7 @@
     overTitle: $("#overTitle"),
     overCopy: $("#overCopy"),
     finalDistance: $("#finalDistance"),
+    finalCombo: $("#finalCombo"),
     finalScore: $("#finalScore"),
     finalFish: $("#finalFish"),
     finalBest: $("#finalBest"),
@@ -1811,6 +1985,7 @@
         uniform float uAlpha;
         uniform float uEmissive;
         uniform float uSpecular;
+        uniform float uRim;
 
         out vec4 fragColor;
 
@@ -1828,7 +2003,7 @@
           vec3 color = vColor * (ambient + uSunColor * ndl * 0.92 + vec3(0.10, 0.13, 0.20) * fill);
 
           float rim = pow(1.0 - max(dot(N, V), 0.0), 3.0);
-          color += uSunColor * rim * 0.15;
+          color += uSunColor * rim * 0.15 * uRim;
 
           vec3 H = normalize(L + V);
           color += uSunColor * pow(max(dot(N, H), 0.0), 42.0) * uSpecular;
@@ -2206,6 +2381,7 @@
   ]);
 
   const meshUniforms = programs.mesh.uniforms;
+  let meshRimDefault = 1;
   const sunDirection = vec3Normalize([0.56, 0.16, -0.82]);
   const lightDirection = vec3Normalize([0.54, 0.31, -0.75]);
   const sunColor = [1.0, 0.69, 0.42];
@@ -2230,6 +2406,8 @@
     gl.uniform1f(meshUniforms.uAlpha, 1);
     gl.uniform1f(meshUniforms.uEmissive, 0);
     gl.uniform1f(meshUniforms.uSpecular, 0);
+    gl.uniform1f(meshUniforms.uRim, 1);
+    meshRimDefault = 1;
   }
 
   function drawMesh(mesh, model, options) {
@@ -2241,6 +2419,7 @@
     gl.uniform1f(meshUniforms.uAlpha, opts.alpha === undefined ? 1 : opts.alpha);
     gl.uniform1f(meshUniforms.uEmissive, opts.emissive || 0);
     gl.uniform1f(meshUniforms.uSpecular, opts.specular || 0);
+    gl.uniform1f(meshUniforms.uRim, opts.rim === undefined ? meshRimDefault : opts.rim);
     mesh.draw();
   }
 
@@ -2549,7 +2728,7 @@
     }
   }
 
-  function addFeather(P, root, tip, width, thickness, color, sideDirection, jitter) {
+  function addFeather(P, root, tip, width, thickness, color, sideDirection, jitter, tipColor) {
     const direction = normalizeVec(subVec(tip, root));
     let side = sideDirection ? normalizeVec(sideDirection) : normalizeVec(crossVec(direction, [0, 1, 0]));
     if (!isFinite(side[0]) || Math.hypot(side[0], side[1], side[2]) < 0.01) {
@@ -2564,18 +2743,20 @@
     const midR = addVec(mid, scaleVec(side, width * 0.55));
     const tipPoint = addVec(tip, scaleVec(side, width * 0.03));
     const offset = scaleVec(surfaceNormal, thickness * 0.5);
-    const upper = [addVec(rootL, offset), addVec(rootR, offset), addVec(midR, offset), addVec(midL, offset), tipPoint ? addVec(tipPoint, offset) : addVec(tip, offset)];
+    const upper = [addVec(rootL, offset), addVec(rootR, offset), addVec(midR, offset), addVec(midL, offset), addVec(tipPoint, offset)];
     const lower = [addVec(rootL, scaleVec(offset, -1)), addVec(rootR, scaleVec(offset, -1)), addVec(midR, scaleVec(offset, -1)), addVec(midL, scaleVec(offset, -1)), addVec(tipPoint, scaleVec(offset, -1))];
-    pushQuad(P, upper[0], upper[1], upper[2], upper[3], color, surfaceNormal, jitter === undefined ? 0.035 : jitter);
-    pushTri(P, upper[3], upper[2], upper[4], color, surfaceNormal, jitter);
-    pushQuad(P, lower[3], lower[2], lower[1], lower[0], color, scaleVec(surfaceNormal, -1), jitter);
-    pushTri(P, lower[4], lower[2], lower[3], color, scaleVec(surfaceNormal, -1), jitter);
-    pushQuad(P, upper[0], upper[3], lower[3], lower[0], color, side, jitter);
-    pushQuad(P, upper[1], lower[1], lower[2], upper[2], color, scaleVec(side, -1), jitter);
-    pushTri(P, upper[3], upper[4], lower[4], color, side, jitter);
-    pushTri(P, upper[3], lower[4], lower[3], color, side, jitter);
-    pushTri(P, upper[2], lower[2], lower[4], color, scaleVec(side, -1), jitter);
-    pushTri(P, upper[2], lower[4], upper[4], color, scaleVec(side, -1), jitter);
+    const tipShade = tipColor || color;
+    const featherJitter = jitter === undefined ? 0.035 : jitter;
+    pushQuad(P, upper[0], upper[1], upper[2], upper[3], color, surfaceNormal, featherJitter);
+    pushTri(P, upper[3], upper[2], upper[4], tipShade, surfaceNormal, featherJitter);
+    pushQuad(P, lower[3], lower[2], lower[1], lower[0], color, scaleVec(surfaceNormal, -1), featherJitter);
+    pushTri(P, lower[4], lower[2], lower[3], tipShade, scaleVec(surfaceNormal, -1), featherJitter);
+    pushQuad(P, upper[0], upper[3], lower[3], lower[0], color, side, featherJitter);
+    pushQuad(P, upper[1], lower[1], lower[2], upper[2], color, scaleVec(side, -1), featherJitter);
+    pushTri(P, upper[3], upper[4], lower[4], tipShade, side, featherJitter);
+    pushTri(P, upper[3], lower[4], lower[3], tipShade, side, featherJitter);
+    pushTri(P, upper[2], lower[2], lower[4], tipShade, scaleVec(side, -1), featherJitter);
+    pushTri(P, upper[2], lower[4], upper[4], tipShade, scaleVec(side, -1), featherJitter);
   }
 
   function addEllipseCylinder(P, center, rx, ry, height, color, sides, rotation) {
@@ -2613,6 +2794,9 @@
     creamShade: hexToRgb("#d8c0a7"),
     featherGrey: hexToRgb("#c2b5aa"),
     featherDark: hexToRgb("#948b89"),
+    plumagePeach: hexToRgb("#f3c4ab"),
+    plumageRose: hexToRgb("#e9a492"),
+    plumageSlate: hexToRgb("#9b9098"),
     orange: hexToRgb("#f4a257"),
     orangeLight: hexToRgb("#ffc172"),
     orangeDeep: hexToRgb("#df8643"),
@@ -2627,6 +2811,7 @@
     tealLight: hexToRgb("#63b9ae"),
     tealDark: hexToRgb("#1c5e5c"),
     straw: hexToRgb("#e4c17e"),
+    strawLight: hexToRgb("#f1d69d"),
     strawDark: hexToRgb("#b88f50"),
     leather: hexToRgb("#674637"),
     leatherDark: hexToRgb("#47332b"),
@@ -2754,6 +2939,19 @@
     addBox(P, [0.28, 0.87, 0.59], [0.035, 0.19, 0.2], C.leatherDark, null, 0.01);
     addBox(P, [0.207, 0.87, 0.47], [0.11, 0.026, 0.02], C.rim, null, 0.01);
 
+    // A small bouquet tied to the rear rack, just visible from the chase view.
+    addBox(P, [0.285, 0.965, 0.66], [0.105, 0.085, 0.11], C.basket, [0.02, -0.1, 0.06], 0.012);
+    addTube(P, [0.275, 0.99, 0.67], [0.335, 1.12, 0.72], 0.008, 0.005, C.stem, { sides: 4, caps: false });
+    addTube(P, [0.3, 0.99, 0.64], [0.37, 1.08, 0.61], 0.007, 0.0045, C.stem, { sides: 4, caps: false });
+    addTube(P, [0.26, 1.0, 0.69], [0.24, 1.1, 0.79], 0.006, 0.004, C.stem, { sides: 4, caps: false });
+    addFeather(P, [0.31, 1.03, 0.68], [0.39, 1.03, 0.74], 0.09, 0.009, C.leafGreen, [0, 0.2, 1], 0.01);
+    addFeather(P, [0.27, 1.03, 0.7], [0.2, 1.01, 0.79], 0.08, 0.008, C.leafGreen, [0, 0.2, 1], 0.01);
+    addIco(P, [0.34, 1.13, 0.72], [0.05, 0.034, 0.05], 1, C.flowerPink, 0.008);
+    addIco(P, [0.375, 1.085, 0.61], [0.044, 0.03, 0.044], 1, C.creamLight, 0.006);
+    addIco(P, [0.245, 1.105, 0.79], [0.04, 0.028, 0.038], 1, C.flowerYellow, 0.006);
+    addIco(P, [0.34, 1.14, 0.72], [0.018, 0.018, 0.018], 1, C.gold, 0.004);
+    addBox(P, [0.285, 1.005, 0.66], [0.108, 0.018, 0.112], C.coral, [0.02, -0.1, 0.06], 0.006);
+
     return P;
   }
 
@@ -2794,116 +2992,280 @@
 
   function buildBody() {
     const P = newBuilder();
-    addIco(P, [0, 1.59, 0.12], [0.47, 0.52, 0.59], 2, C.creamLight, 0.016);
-    addIco(P, [0, 1.44, 0.34], [0.34, 0.34, 0.34], 1, C.cream, 0.014);
-    addIco(P, [0, 1.87, 0.10], [0.35, 0.28, 0.38], 1, C.cream, 0.016);
+    const bodyTone = mixRgb(C.creamLight, C.plumagePeach, 0.075);
 
-    // A longer neck gives the silhouette its pelican character.
-    addTube(P, [0, 1.89, -0.01], [0, 2.03, -0.05], 0.168, 0.142, C.creamLight, { sides: 9, caps: true });
-    addTube(P, [0, 2.03, -0.05], [0, 2.18, -0.13], 0.142, 0.119, C.creamLight, { sides: 9, caps: true });
-    addTube(P, [0, 2.18, -0.13], [0, 2.32, -0.21], 0.119, 0.099, C.creamLight, { sides: 9, caps: true });
-    addIco(P, [0, 2.02, -0.01], [0.215, 0.18, 0.2], 1, C.cream, 0.014);
+    // A tapered, bird-like torso: full chest, soft belly, narrow rump.
+    addEllipseLoft(P, [
+      { y: 1.56, z: -0.53, rx: 0.22, ry: 0.28 },
+      { y: 1.56, z: -0.4, rx: 0.31, ry: 0.37 },
+      { y: 1.56, z: -0.18, rx: 0.38, ry: 0.45 },
+      { y: 1.57, z: 0.04, rx: 0.4, ry: 0.47 },
+      { y: 1.58, z: 0.26, rx: 0.37, ry: 0.44 },
+      { y: 1.59, z: 0.46, rx: 0.3, ry: 0.36 },
+      { y: 1.61, z: 0.61, rx: 0.19, ry: 0.24 },
+      { y: 1.63, z: 0.7, rx: 0.075, ry: 0.1 }
+    ], 22, bodyTone, mixRgb(bodyTone, C.plumagePeach, 0.09), bodyTone);
+    addIco(P, [0, 1.47, -0.41], [0.255, 0.31, 0.22], 2, bodyTone, 0.007);
+    addIco(P, [0, 2.08, -0.07], [0.16, 0.17, 0.155], 2, mixRgb(bodyTone, C.cream, 0.4), 0.01);
 
-    // A scarf knot and two long trailing ribbons are the main rear-view accent.
-    addTorus(P, [0, 2.205, -0.12], 0.127, 0.038, 14, 5, C.coral, [Math.PI / 2, 0, 0], 0.01);
-    addIco(P, [0, 2.19, 0.05], [0.085, 0.062, 0.06], 1, C.coralDeep, 0.008);
-    addFeather(P, [-0.02, 2.19, 0.055], [-0.16, 2.27, 0.03], 0.12, 0.012, C.coralLight, [0, 0.3, 1], 0.008);
-    addFeather(P, [0.04, 2.18, 0.06], [0.16, 2.23, 0.06], 0.1, 0.012, C.coral, [0, 0.3, 1], 0.008);
+    // A longer, elegant S-curved neck.
+    addTube(P, [0, 1.87, 0.0], [0, 2.02, -0.03], 0.175, 0.15, bodyTone, { sides: 10, caps: true, jitter: 0.012 });
+    addTube(P, [0, 2.02, -0.03], [0, 2.15, -0.09], 0.15, 0.132, bodyTone, { sides: 10, caps: true, jitter: 0.01 });
+    addTube(P, [0, 2.15, -0.09], [0, 2.28, -0.15], 0.132, 0.115, bodyTone, { sides: 10, caps: true, jitter: 0.01 });
+    addTube(P, [0, 2.28, -0.15], [0, 2.41, -0.24], 0.115, 0.1, bodyTone, { sides: 10, caps: true, jitter: 0.009 });
+    addTube(P, [0, 2.41, -0.24], [0, 2.51, -0.34], 0.1, 0.085, bodyTone, { sides: 10, caps: true, jitter: 0.008 });
 
-    // A short coral neckerchief lies against the back and reads strongly from chase view.
+    // A soft feather collar conceals the neck join.
+    const ruffTone = mixRgb(C.creamLight, C.plumagePeach, 0.16);
+    addIco(P, [-0.115, 2.05, -0.1], [0.085, 0.06, 0.105], 1, ruffTone, 0.008);
+    addIco(P, [0.115, 2.05, -0.1], [0.085, 0.06, 0.105], 1, ruffTone, 0.008);
+    addIco(P, [-0.165, 2.04, -0.015], [0.075, 0.055, 0.095], 1, mixRgb(ruffTone, C.cream, 0.25), 0.008);
+    addIco(P, [0.165, 2.04, -0.015], [0.075, 0.055, 0.095], 1, mixRgb(ruffTone, C.cream, 0.25), 0.008);
+
+    // A feather ruff frames the scarf.
+    addFeather(P, [-0.1, 2.16, -0.01], [-0.29, 2.23, 0.09], 0.13, 0.009, C.creamLight, [0, 0.2, 1], 0.012, C.plumagePeach);
+    addFeather(P, [0.1, 2.16, -0.01], [0.29, 2.23, 0.09], 0.13, 0.009, C.creamLight, [0, 0.2, 1], 0.012, C.plumagePeach);
+    addFeather(P, [0, 2.17, 0.03], [0.02, 2.04, 0.18], 0.14, 0.009, C.cream, [1, 0, 0], 0.012, C.plumageRose);
+
+    // Coral silk: a narrow folded neckerchief, then the animated tails.
+    addTorus(P, [0, 2.235, -0.11], 0.128, 0.033, 16, 5, C.coral, [Math.PI / 2, 0, 0], 0.008);
+    addIco(P, [0, 2.215, 0.055], [0.073, 0.052, 0.048], 1, C.coralDeep, 0.005);
     const capeRows = [
-      { y: 2.235, z: 0.085, w: 0.145 },
-      { y: 2.09, z: 0.41, w: 0.245 },
-      { y: 2.0, z: 0.52, w: 0.155 },
-      { y: 1.94, z: 0.57, w: 0.02, x: 0.035 }
+      { y: 2.215, z: 0.075, w: 0.105 },
+      { y: 2.09, z: 0.27, w: 0.175 },
+      { y: 1.995, z: 0.445, w: 0.115 },
+      { y: 1.95, z: 0.525, w: 0.016, x: 0.035 }
     ];
     for (let i = 0; i < capeRows.length - 1; i++) {
       const a = capeRows[i];
       const b = capeRows[i + 1];
-      const color = mixRgb(C.coral, C.coralLight, i === 1 ? 0.14 : 0.03);
+      const color = mixRgb(C.coral, C.coralLight, i === 1 ? 0.1 : 0.02);
       const bCenter = b.x || 0;
       if (i === capeRows.length - 2) {
-        pushTri(P, [-a.w, a.y, a.z], [a.w, a.y, a.z], [bCenter + b.w, b.y, b.z], color, [0, 0.35, 1], 0.012);
+        pushTri(P, [-a.w, a.y, a.z], [a.w, a.y, a.z], [bCenter + b.w, b.y, b.z], color, [0, 0.3, 1], 0.008);
       } else {
-        pushQuad(P, [-a.w, a.y, a.z], [a.w, a.y, a.z], [bCenter + b.w, b.y, b.z], [bCenter - b.w, b.y, b.z], color, [0, 0.35, 1], 0.012);
+        pushQuad(P, [-a.w, a.y, a.z], [a.w, a.y, a.z], [bCenter + b.w, b.y, b.z], [bCenter - b.w, b.y, b.z], color, [0, 0.3, 1], 0.008);
       }
     }
-    addIco(P, [0, 2.24, 0.075], [0.038, 0.031, 0.03], 1, C.gold, 0.005);
+    addTube(P, [-0.145, 1.995, 0.45], [-0.02, 1.948, 0.529], 0.007, 0.003, C.gold, { sides: 4, caps: false, jitter: 0.003 });
+    addTube(P, [0.145, 1.995, 0.45], [0.05, 1.948, 0.529], 0.007, 0.003, C.gold, { sides: 4, caps: false, jitter: 0.003 });
+    addIco(P, [0, 2.225, 0.075], [0.032, 0.024, 0.021], 1, C.gold, 0.004);
 
-    addFeather(P, [0, 1.54, 0.56], [-0.3, 1.73, 1.15], 0.2, 0.016, C.featherGrey, [1, 0, 0.1], 0.028);
-    addFeather(P, [-0.01, 1.52, 0.59], [-0.12, 1.65, 1.24], 0.22, 0.017, C.cream, [1, 0, 0], 0.022);
-    addFeather(P, [0.01, 1.5, 0.6], [0.12, 1.67, 1.22], 0.21, 0.017, C.creamLight, [1, 0, 0], 0.022);
-    addFeather(P, [0.02, 1.55, 0.56], [0.31, 1.76, 1.12], 0.19, 0.016, C.featherGrey, [-1, 0, 0.1], 0.028);
-    addFeather(P, [-0.03, 1.48, 0.61], [-0.2, 1.52, 1.1], 0.16, 0.014, C.featherDark, [1, 0, 0.15], 0.03);
+    // A soft, broad tail fan with warm-tinted edges.
+    addIco(P, [0, 1.55, 0.56], [0.23, 0.15, 0.24], 2, mixRgb(C.creamShade, C.creamLight, 0.3), 0.012);
+    addFeather(P, [-0.05, 1.6, 0.55], [-0.27, 1.87, 0.98], 0.22, 0.009, C.creamShade, [1, 0, 0], 0.018, mixRgb(C.plumagePeach, C.cream, 0.32));
+    addFeather(P, [0, 1.61, 0.56], [0.02, 1.94, 1.02], 0.26, 0.01, C.creamLight, [1, 0, 0], 0.016, mixRgb(C.plumageSlate, C.cream, 0.48));
+    addFeather(P, [0.05, 1.6, 0.55], [0.3, 1.86, 0.96], 0.22, 0.009, C.cream, [1, 0, 0], 0.018, mixRgb(C.plumagePeach, C.cream, 0.32));
+    addFeather(P, [-0.11, 1.53, 0.58], [-0.2, 1.72, 0.87], 0.13, 0.008, mixRgb(C.creamShade, C.creamLight, 0.35), [1, 0, 0], 0.016, C.featherGrey);
+    addFeather(P, [0.11, 1.53, 0.58], [0.22, 1.71, 0.85], 0.13, 0.008, C.cream, [1, 0, 0], 0.016, mixRgb(C.featherGrey, C.cream, 0.4));
+    addFeather(P, [-0.14, 1.63, 0.5], [-0.53, 1.91, 0.86], 0.15, 0.008, C.creamShade, [1, 0, 0], 0.018, mixRgb(C.plumageSlate, C.cream, 0.5));
+    addFeather(P, [0.14, 1.63, 0.5], [0.54, 1.89, 0.84], 0.15, 0.008, C.cream, [1, 0, 0], 0.018, mixRgb(C.plumagePeach, C.cream, 0.3));
 
-    addIco(P, [-0.235, 1.3, 0.24], [0.135, 0.14, 0.14], 1, C.creamShade, 0.012);
-    addIco(P, [0.235, 1.3, 0.24], [0.135, 0.14, 0.14], 1, C.creamShade, 0.012);
+    // A pair of long mantle feathers breaks up the white back.
+    const mantle = mixRgb(C.featherGrey, C.creamLight, 0.36);
+    addFeather(P, [-0.06, 1.98, 0.22], [-0.25, 1.75, 0.45], 0.17, 0.009, mantle, [1, 0, 0], 0.015, mixRgb(C.plumagePeach, C.cream, 0.3));
+    addFeather(P, [0.06, 1.98, 0.22], [0.26, 1.74, 0.43], 0.17, 0.009, mantle, [1, 0, 0], 0.015, mixRgb(C.plumagePeach, C.cream, 0.3));
 
-    addIco(P, [-0.33, 1.68, 0.4], [0.23, 0.17, 0.14], 1, C.creamShade, 0.014);
-    addIco(P, [0.33, 1.68, 0.4], [0.23, 0.17, 0.14], 1, C.creamShade, 0.014);
+    addIco(P, [-0.235, 1.3, 0.24], [0.12, 0.125, 0.125], 1, C.creamShade, 0.01);
+    addIco(P, [0.235, 1.3, 0.24], [0.12, 0.125, 0.125], 1, C.creamShade, 0.01);
     return P;
   }
 
   function buildBeak() {
     const P = newBuilder();
     const upperSections = [
-      { y: 0.035, z: -0.23, rx: 0.125, ry: 0.058 },
-      { y: 0.028, z: -0.38, rx: 0.155, ry: 0.055 },
-      { y: -0.015, z: -0.61, rx: 0.13, ry: 0.045 },
-      { y: -0.085, z: -0.84, rx: 0.08, ry: 0.03 },
-      { y: -0.165, z: -1.01, rx: 0.029, ry: 0.015 },
-      { y: -0.185, z: -1.065, rx: 0.01, ry: 0.008 }
+      { y: 0.042, z: -0.205, rx: 0.12, ry: 0.059 },
+      { y: 0.035, z: -0.34, rx: 0.152, ry: 0.056 },
+      { y: -0.006, z: -0.56, rx: 0.132, ry: 0.045 },
+      { y: -0.066, z: -0.78, rx: 0.085, ry: 0.031 },
+      { y: -0.136, z: -0.94, rx: 0.032, ry: 0.017 },
+      { y: -0.156, z: -1.0, rx: 0.011, ry: 0.008 }
     ];
-    addEllipseLoft(P, upperSections, 8, C.orangeLight, C.orange, C.beakTip);
+    addEllipseLoft(P, upperSections, 12, mixRgb(C.orangeLight, C.creamLight, 0.38), C.orange, C.beakTip);
 
+    const pouchTop = mixRgb(C.coralLight, C.pouchLight, 0.42);
+    const pouchBottom = mixRgb(C.pouch, C.coralDeep, 0.38);
     const pouchSections = [
-      { y: -0.085, z: -0.235, rx: 0.14, ry: 0.108 },
-      { y: -0.205, z: -0.37, rx: 0.19, ry: 0.182 },
-      { y: -0.255, z: -0.55, rx: 0.178, ry: 0.17 },
-      { y: -0.2, z: -0.74, rx: 0.122, ry: 0.118 },
-      { y: -0.15, z: -0.905, rx: 0.058, ry: 0.057 },
-      { y: -0.15, z: -1.02, rx: 0.022, ry: 0.02 }
+      { y: -0.08, z: -0.205, rx: 0.13, ry: 0.105 },
+      { y: -0.205, z: -0.33, rx: 0.19, ry: 0.19 },
+      { y: -0.26, z: -0.52, rx: 0.18, ry: 0.185 },
+      { y: -0.22, z: -0.71, rx: 0.13, ry: 0.125 },
+      { y: -0.155, z: -0.87, rx: 0.064, ry: 0.058 },
+      { y: -0.145, z: -0.965, rx: 0.023, ry: 0.019 }
     ];
-    addEllipseLoft(P, pouchSections, 8, C.pouchLight, C.pouchDark, C.pouch);
+    addEllipseLoft(P, pouchSections, 12, pouchTop, pouchBottom, C.pouch);
 
-    addTube(P, [-0.12, -0.045, -0.27], [-0.018, -0.13, -1.045], 0.008, 0.003, C.pouchDark, { sides: 4, caps: false, jitter: 0.005 });
-    addTube(P, [0.12, -0.045, -0.27], [0.018, -0.13, -1.045], 0.008, 0.003, C.pouchDark, { sides: 4, caps: false, jitter: 0.005 });
-    addTube(P, [0, 0.092, -0.5], [0, 0.028, -0.87], 0.014, 0.006, C.orangeLight, { sides: 4, caps: false, jitter: 0.006 });
-    addFeather(P, [-0.11, -0.25, -0.38], [-0.07, -0.35, -0.61], 0.08, 0.008, C.pouch, [0, 0, 1], 0.01);
-    addFeather(P, [0.11, -0.25, -0.38], [0.07, -0.35, -0.61], 0.08, 0.008, C.pouch, [0, 0, 1], 0.01);
+    // Mouth seam, cheek folds and a pale highlight along the upper ridge.
+    addTube(P, [-0.12, -0.04, -0.26], [-0.018, -0.13, -0.985], 0.0075, 0.0028, C.pouchDark, { sides: 4, caps: false, jitter: 0.004 });
+    addTube(P, [0.12, -0.04, -0.26], [0.018, -0.13, -0.985], 0.0075, 0.0028, C.pouchDark, { sides: 4, caps: false, jitter: 0.004 });
+    addTube(P, [0, 0.094, -0.48], [0, 0.032, -0.82], 0.012, 0.005, C.strawLight, { sides: 4, caps: false, jitter: 0.004 });
+    addTube(P, [-0.115, -0.21, -0.38], [-0.04, -0.15, -0.88], 0.0045, 0.002, C.pouchLight, { sides: 3, caps: false, jitter: 0.003 });
+    addTube(P, [0.115, -0.21, -0.38], [0.04, -0.15, -0.88], 0.0045, 0.002, C.pouchLight, { sides: 3, caps: false, jitter: 0.003 });
+    addFeather(P, [-0.115, -0.235, -0.37], [-0.07, -0.335, -0.58], 0.08, 0.008, C.pouch, [0, 0, 1], 0.01, C.pouchDark);
+    addFeather(P, [0.115, -0.235, -0.37], [0.07, -0.335, -0.58], 0.08, 0.008, C.pouch, [0, 0, 1], 0.01, C.pouchDark);
 
     addIco(P, [-0.135, 0.045, -0.24], [0.022, 0.014, 0.017], 0, C.beakTip);
     addIco(P, [0.135, 0.045, -0.24], [0.022, 0.014, 0.017], 0, C.beakTip);
-    addIco(P, [0, -0.185, -1.062], [0.018, 0.018, 0.018], 0, C.beakTip, 0.004);
+    addIco(P, [0, -0.156, -0.998], [0.017, 0.017, 0.017], 0, C.beakTip, 0.004);
     return P;
+  }
+
+  function addSunHat(P) {
+    const segments = 26;
+    const cx = 0.01;
+    const cz = 0.012;
+    const brimY = 0.205;
+    const brimRings = [
+      { rx: 0.17, rz: 0.155, lift: 0.002 },
+      { rx: 0.305, rz: 0.275, lift: 0.001 },
+      { rx: 0.435, rz: 0.385, lift: -0.012 }
+    ];
+    const top = [];
+    const bottom = [];
+    for (let r = 0; r < brimRings.length; r++) {
+      const ring = brimRings[r];
+      const topRing = [];
+      const bottomRing = [];
+      for (let i = 0; i < segments; i++) {
+        const a = i / segments * TAU;
+        const wave = r === brimRings.length - 1
+          ? Math.sin(a * 3 + 0.9) * 0.014 + Math.cos(a * 5 - 0.2) * 0.005
+          : 0;
+        const breathe = r === brimRings.length - 1 ? 1 + Math.sin(a * 4 + 1.2) * 0.025 : 1;
+        const x = cx + Math.cos(a) * ring.rx * breathe;
+        const z = cz + Math.sin(a) * ring.rz * breathe;
+        const y = brimY + ring.lift + wave;
+        topRing.push([x, y, z]);
+        bottomRing.push([x, y - 0.026, z]);
+      }
+      top.push(topRing);
+      bottom.push(bottomRing);
+    }
+    for (let r = 0; r < brimRings.length - 1; r++) {
+      for (let i = 0; i < segments; i++) {
+        const next = (i + 1) % segments;
+        pushQuad(
+          P, top[r][i], top[r][next], top[r + 1][next], top[r + 1][i],
+          r === 0 ? C.strawLight : mixRgb(C.strawLight, C.straw, 0.38),
+          [0, 1, 0], 0.012
+        );
+        pushQuad(
+          P, bottom[r + 1][i], bottom[r + 1][next], bottom[r][next], bottom[r][i],
+          mixRgb(C.strawDark, C.straw, 0.18), [0, -1, 0], 0.01
+        );
+      }
+    }
+    for (let i = 0; i < segments; i++) {
+      const next = (i + 1) % segments;
+      const a = (i + 0.5) / segments * TAU;
+      pushQuad(P, top[2][i], bottom[2][i], bottom[2][next], top[2][next], mixRgb(C.strawLight, C.straw, 0.5), [Math.cos(a), 0.25, Math.sin(a)], 0.01);
+      pushQuad(P, top[0][next], bottom[0][next], bottom[0][i], top[0][i], C.strawDark, [-Math.cos(a), 0, -Math.sin(a)], 0.008);
+    }
+
+    const crownSections = [
+      { y: 0.224, rx: 0.232, rz: 0.202 },
+      { y: 0.286, rx: 0.248, rz: 0.216 },
+      { y: 0.352, rx: 0.222, rz: 0.193 },
+      { y: 0.398, rx: 0.168, rz: 0.146 },
+      { y: 0.424, rx: 0.075, rz: 0.065 }
+    ];
+    const crown = [];
+    for (let s = 0; s < crownSections.length; s++) {
+      const sec = crownSections[s];
+      const ring = [];
+      for (let i = 0; i < segments; i++) {
+        const a = i / segments * TAU;
+        ring.push([cx + Math.cos(a) * sec.rx, sec.y, cz + Math.sin(a) * sec.rz]);
+      }
+      crown.push(ring);
+    }
+    for (let s = 0; s < crownSections.length - 1; s++) {
+      for (let i = 0; i < segments; i++) {
+        const next = (i + 1) % segments;
+        const a = (i + 0.5) / segments * TAU;
+        const color = s === 0 ? C.strawLight : (s === 1 ? mixRgb(C.strawLight, C.straw, 0.35) : C.straw);
+        pushQuad(P, crown[s][i], crown[s][next], crown[s + 1][next], crown[s + 1][i], color, [Math.cos(a), 0.3, Math.sin(a)], 0.01);
+      }
+    }
+    const apex = [cx, 0.438, cz];
+    const topRing = crown[crown.length - 1];
+    for (let i = 0; i < segments; i++) {
+      const next = (i + 1) % segments;
+      pushTri(P, topRing[i], topRing[next], apex, C.strawLight, [0, 1, 0], 0.008);
+    }
+    addIco(P, [cx, 0.442, cz], [0.034, 0.014, 0.03], 1, C.tealDark, 0.005);
+
+    const bandBottom = [];
+    const bandTop = [];
+    for (let i = 0; i < segments; i++) {
+      const a = i / segments * TAU;
+      const cos = Math.cos(a), sin = Math.sin(a);
+      bandBottom.push([cx + cos * 0.246, 0.248, cz + sin * 0.215]);
+      bandTop.push([cx + cos * 0.252, 0.298, cz + sin * 0.221]);
+    }
+    for (let i = 0; i < segments; i++) {
+      const next = (i + 1) % segments;
+      const a = (i + 0.5) / segments * TAU;
+      pushQuad(P, bandBottom[i], bandBottom[next], bandTop[next], bandTop[i], i % 4 === 0 ? C.tealLight : C.teal, [Math.cos(a), 0, Math.sin(a)], 0.006);
+    }
+
+    const bow = [0.235, 0.294, 0.01];
+    pushTri(P, bow, [0.335, 0.322, 0.075], [0.345, 0.286, -0.015], C.tealLight, [0, 0, 1], 0.006);
+    pushTri(P, bow, [0.333, 0.264, 0.06], [0.337, 0.29, -0.03], C.teal, [0, 0, -1], 0.006);
+    addIco(P, bow, [0.038, 0.031, 0.027], 1, C.gold, 0.004);
+    addTube(P, bow, [0.27, 0.205, 0.12], 0.018, 0.009, C.teal, { sides: 4, caps: false, jitter: 0.005 });
+    addTube(P, [0.23, 0.285, 0.02], [0.33, 0.19, 0.08], 0.015, 0.007, C.tealLight, { sides: 4, caps: false, jitter: 0.005 });
+
+    const flowerCenters = [
+      [0.17, 0.335, -0.18],
+      [-0.17, 0.33, -0.16],
+      [0.32, 0.3, 0.015]
+    ];
+    for (let f = 0; f < flowerCenters.length; f++) {
+      const center = flowerCenters[f];
+      const big = f === 1;
+      const petals = big ? 6 : 5;
+      for (let p = 0; p < petals; p++) {
+        const angle = p / petals * TAU + f * 0.35;
+        const spread = big ? 1.22 : 1;
+        const petal = [center[0] + Math.cos(angle) * 0.036 * spread, center[1] + Math.sin(angle) * 0.028 * spread, center[2] - 0.012];
+        addIco(P, petal, [0.03 * spread, 0.02 * spread, 0.019 * spread], 0, big || f === 0 ? C.flowerPink : C.creamLight, 0.006);
+      }
+      addIco(P, center, [0.022, 0.017, 0.014], 0, C.gold, 0.003);
+    }
+    addTube(P, [0.1, 0.29, 0.19], [0.18, 0.22, 0.3], 0.017, 0.008, C.teal, { sides: 4, caps: false, jitter: 0.004 });
   }
 
   function buildHead() {
     const P = newBuilder();
-    addIco(P, [0, 0, 0], [0.268, 0.28, 0.3], 2, C.creamLight, 0.016);
-    addIco(P, [0, -0.055, -0.02], [0.23, 0.22, 0.25], 1, C.cream, 0.012);
+    const headTone = mixRgb(C.creamLight, C.plumagePeach, 0.065);
+    addIco(P, [0, 0, 0], [0.258, 0.278, 0.3], 3, headTone, 0.012);
+    addIco(P, [0, -0.06, -0.005], [0.225, 0.215, 0.25], 2, mixRgb(headTone, C.cream, 0.35), 0.008);
+    addSunHat(P);
 
-    addIco(P, [0, 0.238, 0.012], [0.42, 0.03, 0.38], 2, C.straw, 0.02);
-    addIco(P, [0, 0.316, 0.008], [0.259, 0.145, 0.235], 2, C.straw, 0.02);
-    addTorus(P, [0, 0.273, 0.008], 0.244, 0.031, 18, 5, C.teal, [Math.PI / 2, 0, 0], 0.009);
-    addIco(P, [0.17, 0.33, -0.185], [0.062, 0.038, 0.052], 1, C.flowerPink, 0.01);
-    addIco(P, [0.17, 0.335, -0.19], [0.023, 0.023, 0.023], 1, C.gold, 0.008);
-    addIco(P, [0, 0.46, 0.008], [0.055, 0.025, 0.048], 1, C.tealDark, 0.006);
-
-    // Small crest feathers at the back of the head.
-    addFeather(P, [-0.14, 0.16, 0.2], [-0.25, 0.3, 0.33], 0.09, 0.01, C.featherGrey, [0, 0.3, 1], 0.012);
-    addFeather(P, [0.14, 0.16, 0.2], [0.25, 0.28, 0.31], 0.09, 0.01, C.featherGrey, [0, 0.3, 1], 0.012);
+    // Soft crest feathers tucked below the hat brim.
+    addFeather(P, [-0.13, 0.13, 0.2], [-0.27, 0.25, 0.35], 0.08, 0.009, C.creamLight, [0, 0.2, 1], 0.01, C.plumagePeach);
+    addFeather(P, [0.13, 0.13, 0.2], [0.27, 0.24, 0.34], 0.08, 0.009, C.creamLight, [0, 0.2, 1], 0.01, C.plumagePeach);
     return P;
   }
 
   function buildFace() {
     const P = newBuilder();
-    addIco(P, [-0.236, 0.075, -0.17], [0.043, 0.049, 0.044], 1, C.fishEye, 0.004);
-    addIco(P, [0.236, 0.075, -0.17], [0.043, 0.049, 0.044], 1, C.fishEye, 0.004);
-    addIco(P, [-0.247, 0.096, -0.196], [0.013, 0.013, 0.013], 0, C.creamLight, 0.002);
-    addIco(P, [0.247, 0.096, -0.196], [0.013, 0.013, 0.013], 0, C.creamLight, 0.002);
-    addFeather(P, [-0.21, 0.13, -0.12], [-0.31, 0.17, -0.1], 0.075, 0.007, C.creamShade, [0, 0, 1], 0.008);
-    addFeather(P, [0.21, 0.13, -0.12], [0.31, 0.17, -0.1], 0.075, 0.007, C.creamShade, [0, 0, 1], 0.008);
+    const blush = mixRgb(C.plumageRose, C.cream, 0.18);
+    const brow = mixRgb(C.plumageSlate, C.cream, 0.25);
+    const eyePatch = mixRgb(C.plumagePeach, C.cream, 0.12);
+    addIco(P, [-0.236, 0.076, -0.162], [0.06, 0.066, 0.03], 1, eyePatch, 0.004);
+    addIco(P, [0.236, 0.076, -0.162], [0.06, 0.066, 0.03], 1, eyePatch, 0.004);
+    addIco(P, [-0.237, 0.08, -0.177], [0.039, 0.045, 0.04], 1, C.fishEye, 0.003);
+    addIco(P, [0.237, 0.08, -0.177], [0.039, 0.045, 0.04], 1, C.fishEye, 0.003);
+    addIco(P, [-0.247, 0.098, -0.202], [0.0135, 0.0135, 0.0135], 0, C.creamLight, 0.002);
+    addIco(P, [0.247, 0.098, -0.202], [0.0135, 0.0135, 0.0135], 0, C.creamLight, 0.002);
+    addIco(P, [-0.239, 0.068, -0.207], [0.006, 0.006, 0.006], 0, C.cream, 0.001);
+    addIco(P, [0.239, 0.068, -0.207], [0.006, 0.006, 0.006], 0, C.cream, 0.001);
+    addFeather(P, [-0.19, 0.148, -0.125], [-0.35, 0.195, -0.075], 0.08, 0.006, brow, [0, 0, 1], 0.006, mixRgb(C.plumagePeach, C.cream, 0.25));
+    addFeather(P, [0.19, 0.148, -0.125], [0.35, 0.195, -0.075], 0.08, 0.006, brow, [0, 0, 1], 0.006, mixRgb(C.plumagePeach, C.cream, 0.25));
+    addIco(P, [-0.205, -0.018, -0.153], [0.082, 0.052, 0.035], 1, blush, 0.004);
+    addIco(P, [0.205, -0.018, -0.153], [0.082, 0.052, 0.035], 1, blush, 0.004);
     return P;
   }
 
@@ -2912,24 +3274,35 @@
     const s = side;
     const shoulder = [0, 0, 0];
     const elbow = [-0.018 * s, -0.235, -0.31];
-    const wrist = [-0.055 * s, -0.40, -0.56];
-    addIco(P, [0.02 * s, 0.03, 0.08], [0.17, 0.14, 0.2], 1, C.creamShade, 0.018);
-    addTube(P, shoulder, elbow, 0.108, 0.08, C.cream, { sides: 8, caps: true });
-    addTube(P, elbow, wrist, 0.077, 0.047, C.creamShade, { sides: 8, caps: true });
-    addIco(P, wrist, [0.066, 0.072, 0.085], 1, C.creamLight, 0.014);
+    const wrist = [-0.055 * s, -0.4, -0.56];
+    const wingBase = mixRgb(C.creamShade, C.creamLight, 0.48);
+    const peachTip = mixRgb(C.plumagePeach, C.cream, 0.34);
+    const slateTip = mixRgb(C.plumageSlate, C.cream, 0.55);
 
-    // Folded flight feathers flare outward, keeping the wing silhouette readable from behind.
-    addFeather(P, [0.01 * s, -0.02, 0.14], [0.16 * s, -0.23, 0.58], 0.27, 0.013, C.featherGrey, [s, 0.35, 0.45], 0.03);
-    addFeather(P, [0.02 * s, -0.08, 0.1], [0.23 * s, -0.4, 0.5], 0.24, 0.013, C.creamShade, [s, 0.35, 0.45], 0.026);
-    addFeather(P, [0.035 * s, -0.15, 0.06], [0.29 * s, -0.55, 0.36], 0.2, 0.012, C.featherGrey, [s, 0.35, 0.45], 0.03);
-    addFeather(P, [0.045 * s, -0.33, -0.34], [0.2 * s, -0.54, 0.14], 0.13, 0.011, C.creamLight, [s, 0.3, 0.5], 0.024);
+    // A small shoulder cap softens the wing root without changing the body silhouette.
+    addIco(P, [0.025 * s, -0.03, 0.08], [0.075, 0.105, 0.14], 1, wingBase, 0.008);
 
-    // Dark feather tips add definition to the folded wing.
-    addFeather(P, [0.105 * s, -0.155, 0.465], [0.16 * s, -0.23, 0.575], 0.16, 0.006, C.featherDark, [s, 0.35, 0.45], 0.012);
-    addFeather(P, [0.17 * s, -0.305, 0.4], [0.23 * s, -0.4, 0.495], 0.13, 0.006, C.featherDark, [s, 0.35, 0.45], 0.012);
-    addFeather(P, [0.22 * s, -0.455, 0.285], [0.29 * s, -0.55, 0.355], 0.1, 0.006, C.featherDark, [s, 0.35, 0.45], 0.012);
+    // Folded feathers sit vertically along the body, like a bird at rest.
+    addFeather(P, [0.005 * s, -0.01, 0.1], [0.075 * s, -0.27, 0.45], 0.2, 0.009, C.creamLight, [0, 1, 0], 0.012, peachTip);
+    addFeather(P, [0.015 * s, -0.07, 0.06], [0.1 * s, -0.37, 0.4], 0.18, 0.009, C.cream, [0, 1, 0], 0.012, slateTip);
+    addFeather(P, [0.02 * s, -0.13, 0.01], [0.12 * s, -0.46, 0.3], 0.16, 0.008, wingBase, [0, 1, 0], 0.013, peachTip);
+    addFeather(P, [0.02 * s, -0.19, -0.04], [0.13 * s, -0.53, 0.2], 0.14, 0.007, C.creamShade, [0, 1, 0], 0.014, slateTip);
+    addFeather(P, [0.015 * s, -0.04, 0.12], [0.14 * s, -0.25, 0.38], 0.16, 0.008, C.creamLight, [0, 1, 0], 0.01, peachTip);
 
-    addIco(P, [-0.055 * s, -0.39, -0.57], [0.072, 0.05, 0.075], 1, C.creamShade, 0.01);
+    // Soft grey mantle feathers frame the body from the chase camera.
+    const wingGrey = mixRgb(C.featherGrey, C.creamLight, 0.24);
+    addFeather(P, [0.01 * s, -0.02, 0.11], [0.075 * s, -0.18, 0.34], 0.22, 0.008, C.creamLight, [s, 0, 0], 0.012, peachTip);
+    addFeather(P, [0.02 * s, -0.08, 0.08], [0.115 * s, -0.3, 0.28], 0.19, 0.008, C.cream, [s, 0, 0], 0.013, slateTip);
+    addFeather(P, [0.025 * s, -0.035, 0.13], [0.17 * s, -0.28, 0.41], 0.3, 0.01, wingGrey, [s, 0, 0], 0.014, peachTip);
+    addFeather(P, [0.03 * s, -0.12, 0.085], [0.21 * s, -0.42, 0.32], 0.24, 0.009, mixRgb(wingGrey, C.cream, 0.34), [s, 0, 0], 0.015, slateTip);
+
+    // Slender wing arm to the handlebar.
+    addTube(P, shoulder, elbow, 0.1, 0.073, mixRgb(C.creamLight, C.cream, 0.28), { sides: 8, caps: true });
+    addTube(P, elbow, wrist, 0.072, 0.045, C.creamShade, { sides: 8, caps: true });
+    addIco(P, wrist, [0.061, 0.067, 0.079], 1, C.creamLight, 0.01);
+
+    addIco(P, [-0.055 * s, -0.39, -0.57], [0.069, 0.048, 0.072], 1, C.creamShade, 0.008);
+    addTube(P, [wrist[0] - 0.03 * s, wrist[1] + 0.005, wrist[2] - 0.015], [wrist[0] + 0.03 * s, wrist[1] + 0.02, wrist[2] - 0.01], 0.05, 0.043, C.teal, { sides: 6, caps: true, jitter: 0.006 });
     return P;
   }
 
@@ -3081,16 +3454,16 @@
         const flutter = Math.sin(t * 4.3 - tNow * (2.2 + speedNorm * 1.5) + ribbon * 1.8);
         const crossWave = Math.cos(t * 5.6 + tNow * 1.9 + ribbon * 2.4);
         const droop = isFallen ? t * t * 0.16 : 0;
-        const lateral = side * (0.03 + t * (0.38 + t * 0.12) + flutter * t * 0.075);
-        const height = 2.225
-          + Math.sin(t * Math.PI * 0.82) * (0.13 + speedNorm * 0.14 - (isFallen ? 0.1 : 0))
-          - t * t * 0.18
+        const lateral = side * (0.04 + t * (0.46 + t * 0.13) + flutter * t * 0.095);
+        const height = 2.24
+          + Math.sin(t * Math.PI * 0.8) * (0.17 + speedNorm * 0.16 - (isFallen ? 0.1 : 0))
+          - t * t * 0.22
           - droop
-          + crossWave * t * 0.018;
-        const backward = 0.055 + t * (0.7 + speedNorm * 0.13);
+          + crossWave * t * 0.02;
+        const backward = 0.07 + t * (0.92 + speedNorm * 0.18);
         scarfPoints.push([lateral, height, backward]);
 
-        const baseWidth = ribbon === 0 ? 0.125 + Math.sin(t * Math.PI) * 0.07 : 0.085 + Math.sin(t * Math.PI) * 0.05;
+        const baseWidth = ribbon === 0 ? 0.16 + Math.sin(t * Math.PI) * 0.09 : 0.11 + Math.sin(t * Math.PI) * 0.065;
         const colorBase = mixRgb(C.coral, C.coralLight, 0.1 + t * 0.8);
         const color = t > 0.88 ? mixRgb(colorBase, C.gold, (t - 0.88) / 0.12 * 0.55) : colorBase;
         scarfColors.push([color[0], color[1], color[2], baseWidth]);
@@ -3120,6 +3493,7 @@
       }
 
       for (let step = 0; step < SCARF_STEPS; step++) {
+        const t = step / SCARF_STEPS;
         const a = scarfPoints[step];
         const b = scarfPoints[step + 1];
         const wa = scarfWidthDirs[step];
@@ -3130,10 +3504,12 @@
         const aR = addVec(a, scaleVec(wa, ca[3] * 0.5));
         const bL = addVec(b, scaleVec(wb, -cb[3] * 0.5));
         const bR = addVec(b, scaleVec(wb, cb[3] * 0.5));
+        const trimA = Math.max(0, t - 0.22) / 0.78 * 0.22;
+        const trimB = Math.max(0, (step + 1) / SCARF_STEPS - 0.22) / 0.78 * 0.22;
         const caL = shade([ca[0], ca[1], ca[2]], 0.9);
-        const caR = shade([ca[0], ca[1], ca[2]], 1.06);
+        const caR = mixRgb(shade([ca[0], ca[1], ca[2]], 1.06), C.gold, trimA);
         const cbL = shade([cb[0], cb[1], cb[2]], 0.9);
-        const cbR = shade([cb[0], cb[1], cb[2]], 1.06);
+        const cbR = mixRgb(shade([cb[0], cb[1], cb[2]], 1.06), C.gold, trimB);
 
         pointer = appendClothTriangle(pointer, aL, aR, bR, caL, caR, cbR);
         pointer = appendClothTriangle(pointer, aL, bR, bL, caL, cbR, cbL);
@@ -3170,6 +3546,7 @@
     gl.uniform1f(meshUniforms.uAlpha, 1);
     gl.uniform1f(meshUniforms.uEmissive, 0.015);
     gl.uniform1f(meshUniforms.uSpecular, 0.06);
+    gl.uniform1f(meshUniforms.uRim, 1.35);
     gl.bindVertexArray(scarfVao);
     gl.drawArrays(gl.TRIANGLES, 0, SCARF_VERTEX_COUNT);
     gl.bindVertexArray(null);
@@ -3861,6 +4238,28 @@
     }
   }
 
+  function emitNearMissBurst(playerX, side, clearance) {
+    const closeness = 1 - clamp(clearance / NEAR_MISS_MARGIN, 0, 1);
+    const count = 10 + Math.round(closeness * 7);
+    for (let i = 0; i < count; i++) {
+      const lateral = side * (0.45 + fxRandom() * 1.15);
+      spawnParticle(
+        playerX + side * 0.45 + (fxRandom() - 0.5) * 0.22,
+        0.9 + fxRandom() * 0.65,
+        0.15 + (fxRandom() - 0.5) * 0.4,
+        lateral,
+        0.22 + fxRandom() * 0.7,
+        0.45 + fxRandom() * 0.85,
+        0.38 + fxRandom() * 0.42,
+        0.035 + fxRandom() * 0.065,
+        fxRandom() > 0.45 ? C.gold : (fxRandom() > 0.35 ? C.creamLight : C.coralLight),
+        -0.15,
+        0.7,
+        -0.025
+      );
+    }
+  }
+
   function emitHitBurst(x, y, z) {
     for (let i = 0; i < 20; i++) {
       const angle = fxRandom() * TAU;
@@ -3896,6 +4295,24 @@
         0.08
       );
     }
+  }
+
+  function emitFloatingFeather() {
+    const palette = [C.creamLight, C.plumagePeach, C.featherGrey];
+    spawnParticle(
+      game.laneX + (fxRandom() - 0.5) * 1.2,
+      1.85 + fxRandom() * 0.95,
+      -0.25 + fxRandom() * 0.7,
+      -0.35 + fxRandom() * 0.7,
+      0.03 + fxRandom() * 0.12,
+      0.18 + fxRandom() * 0.35,
+      2.6 + fxRandom() * 2.1,
+      0.018 + fxRandom() * 0.026,
+      palette[(fxRandom() * palette.length) | 0],
+      -0.01,
+      0.26,
+      0.025
+    );
   }
 
   function emitPetal(x, y, z) {
@@ -4285,6 +4702,37 @@
       playTone(880, 0.09, "square", 0.012, 0.02, 620);
     }
 
+    function nearMiss(level) {
+      if (!ensure()) return;
+      const start = ctx.currentTime;
+      const source = ctx.createBufferSource();
+      source.buffer = noiseBuffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.Q.value = 0.85;
+      filter.frequency.setValueAtTime(480, start);
+      filter.frequency.exponentialRampToValueAtTime(1900, start + 0.22);
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.032, start + 0.026);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.33);
+      source.connect(filter);
+      filter.connect(gain);
+      gain.connect(master);
+      source.start(start);
+      source.stop(start + 0.36);
+      const pitch = 740 + Math.min(level, 20) * 18;
+      playTone(pitch, 0.22, "sine", 0.011, 0.018, null);
+      playTone(pitch * 1.5, 0.16, "triangle", 0.0045, 0.075, null);
+    }
+
+    function comboMilestone(level) {
+      if (!ensure()) return;
+      const lift = Math.min(level, 20) / 20;
+      playTone(660 + lift * 110, 0.34, "sine", 0.0065, 0, null);
+      playTone(990 + lift * 165, 0.42, "sine", 0.0042, 0.055, null);
+    }
+
     function countdown(step) {
       if (!ensure()) return;
       const base = step >= 3 ? 523.25 : step === 2 ? 587.33 : 659.25;
@@ -4334,6 +4782,8 @@
       startAmbient,
       pickup,
       hit,
+      nearMiss,
+      comboMilestone,
       countdown,
       go,
       gameOver,
@@ -4348,6 +4798,9 @@
   const FIXED_STEP = 1 / 120;
   const MAX_STEPS_PER_FRAME = 9;
   const COUNTDOWN_LENGTH = 3.0;
+  const COMBO_WINDOW = 4.5;
+  const COMBO_BONUS_CAP = 20;
+  const NEAR_MISS_MARGIN = 0.7;
 
   const game = {
     mode: "intro",
@@ -4357,6 +4810,10 @@
     score: 0,
     fishCount: 0,
     hearts: 3,
+    combo: 0,
+    comboTimer: 0,
+    maxCombo: 0,
+    nearMissCount: 0,
     lane: 1,
     laneX: 0,
     lateralVelocity: 0,
@@ -4386,6 +4843,7 @@
     },
     launchFlash: 0,
     fishSparkleTimer: 0,
+    featherTimer: 1.2,
     summaryShown: false,
     started: false
   };
@@ -4398,6 +4856,8 @@
     goShown: false,
     countdownVisible: false,
     toastTimer: 0,
+    nearMissTimer: 0,
+    comboPulseTimer: 0,
     fishPopTimer: 0,
     heartPopTimers: [],
     ready: false,
@@ -4452,6 +4912,71 @@
     ui.toastTimer = window.setTimeout(() => dom.pickupToast.classList.remove("is-showing"), 1150);
   }
 
+  function showNearMissToast(points) {
+    setText(dom.nearMissPoints, "+" + points);
+    dom.nearMissToast.classList.remove("is-showing");
+    void dom.nearMissToast.offsetWidth;
+    dom.nearMissToast.classList.add("is-showing");
+    window.clearTimeout(ui.nearMissTimer);
+    ui.nearMissTimer = window.setTimeout(() => dom.nearMissToast.classList.remove("is-showing"), 1100);
+  }
+
+  function comboScoreFactor() {
+    return 1 + Math.min(game.combo, COMBO_BONUS_CAP) * 0.05;
+  }
+
+  function updateComboHud() {
+    const active = game.combo > 0;
+    dom.comboHud.classList.toggle("is-active", active);
+    if (!active) {
+      if (dom.comboFill) dom.comboFill.style.width = "0%";
+      return;
+    }
+    setText(dom.comboValue, String(game.combo));
+    setText(dom.comboBonus, "×" + comboScoreFactor().toFixed(1));
+    if (dom.comboFill) {
+      const fill = clamp(game.comboTimer / COMBO_WINDOW, 0, 1) * 100;
+      dom.comboFill.style.width = fill.toFixed(1) + "%";
+    }
+  }
+
+  function pulseComboHud() {
+    dom.comboHud.classList.remove("is-pulse");
+    void dom.comboHud.offsetWidth;
+    dom.comboHud.classList.add("is-pulse");
+    window.clearTimeout(ui.comboPulseTimer);
+    ui.comboPulseTimer = window.setTimeout(() => dom.comboHud.classList.remove("is-pulse"), 400);
+  }
+
+  function incrementCombo(source) {
+    if (game.mode !== "playing") return;
+    const previous = game.combo;
+    game.combo = Math.min(99, game.combo + 1);
+    game.comboTimer = COMBO_WINDOW;
+    game.maxCombo = Math.max(game.maxCombo, game.combo);
+    pulseComboHud();
+    updateComboHud();
+    if (game.combo > previous && game.combo % 5 === 0) {
+      audio.comboMilestone(game.combo);
+    }
+  }
+
+  function breakCombo() {
+    if (game.combo === 0 && game.comboTimer === 0) return;
+    game.combo = 0;
+    game.comboTimer = 0;
+    updateComboHud();
+  }
+
+  function tickCombo(dt) {
+    if (game.combo <= 0) return;
+    game.comboTimer = Math.max(0, game.comboTimer - dt);
+    if (game.comboTimer <= 0) {
+      game.combo = 0;
+      updateComboHud();
+    }
+  }
+
   function flashDamage() {
     dom.damageFlash.classList.remove("is-hit");
     void dom.damageFlash.offsetWidth;
@@ -4477,6 +5002,7 @@
       dom.speedVignette.style.opacity = vignette.toFixed(2);
     }
     syncHearts();
+    updateComboHud();
     if (force) ui.hudUpdateTimer = 0;
     dom.hud.setAttribute("aria-hidden", "false");
   }
@@ -4616,6 +5142,10 @@
     game.score = 0;
     game.fishCount = 0;
     game.hearts = 3;
+    game.combo = 0;
+    game.comboTimer = 0;
+    game.maxCombo = 0;
+    game.nearMissCount = 0;
     game.lane = 1;
     game.laneX = 0;
     game.lateralVelocity = 0;
@@ -4639,6 +5169,7 @@
     game.visual.headNod = 0;
     game.launchFlash = 0;
     game.fishSparkleTimer = 0;
+    game.featherTimer = 1.2;
     game.summaryShown = false;
     game.goDisplay = 0;
     game.countdownTimer = COUNTDOWN_LENGTH;
@@ -4650,7 +5181,12 @@
     resetParticles();
     ui.lastHearts = -1;
     ui.lastFish = -1;
+    window.clearTimeout(ui.toastTimer);
+    window.clearTimeout(ui.nearMissTimer);
+    window.clearTimeout(ui.comboPulseTimer);
     dom.pickupToast.classList.remove("is-showing");
+    dom.nearMissToast.classList.remove("is-showing");
+    dom.comboHud.classList.remove("is-pulse");
     dom.damageFlash.classList.remove("is-hit");
     syncHearts();
     updateHUD(true);
@@ -4797,7 +5333,8 @@
       previousZ: z,
       openLanes: pattern.open.slice(),
       obstacles: [],
-      passedPlayer: false
+      passedPlayer: false,
+      nearMissResolved: false
     };
 
     for (const lane of pattern.blocked) {
@@ -4852,6 +5389,7 @@
   function handleCollision(obstacle) {
     if (game.mode !== "playing" || game.invincible > 0 || obstacle.hit) return;
     obstacle.hit = true;
+    breakCombo();
     game.hearts -= 1;
     game.invincible = 2.0;
     game.hitFlash = 0.42;
@@ -4877,6 +5415,7 @@
     game.keys.accelerate = false;
     game.keys.brake = false;
     game.invincible = 0;
+    breakCombo();
     dom.pauseBtn.disabled = true;
     setTouchControlsVisible(false);
     camera.shake = Math.max(camera.shake, 0.24);
@@ -4889,6 +5428,7 @@
     game.speed = 0;
     const isNewBest = updateBestAfterRun();
     dom.finalDistance.textContent = formatNumber(game.distance);
+    dom.finalCombo.textContent = formatNumber(game.maxCombo);
     dom.finalScore.textContent = formatNumber(game.score);
     dom.finalFish.textContent = formatNumber(game.fishCount);
     dom.finalBest.textContent = best.score > 0
@@ -4942,11 +5482,27 @@
     game.lane = next;
   }
 
+  function awardNearMiss(obstacle, clearance) {
+    if (game.mode !== "playing") return;
+    incrementCombo("near");
+    game.nearMissCount += 1;
+    const reward = Math.round(28 * speedMultiplier() * comboScoreFactor());
+    game.score += reward;
+    const side = obstacle.x >= game.laneX ? 1 : -1;
+    emitNearMissBurst(game.laneX, side, clearance);
+    camera.shake = Math.max(camera.shake, 0.035 + (1 - clamp(clearance / NEAR_MISS_MARGIN, 0, 1)) * 0.025);
+    camera.shakePhase = Math.random() * TAU;
+    audio.nearMiss(game.combo);
+    showNearMissToast(reward);
+    updateHUD(true);
+  }
+
   function collectFish(fish) {
     if (fish.collected) return;
     fish.collected = true;
     game.fishCount += 1;
-    const multiplier = speedMultiplier();
+    incrementCombo("fish");
+    const multiplier = speedMultiplier() * comboScoreFactor();
     const reward = Math.round(94 * multiplier);
     game.score += reward;
     emitPickupBurst(fish.x, fish.y, fish.z);
@@ -4980,6 +5536,23 @@
             handleCollision(obstacle);
             break;
           }
+        }
+      }
+
+      if (!row.nearMissResolved && row.previousZ < 0 && row.z >= 0) {
+        row.nearMissResolved = true;
+        if (game.mode === "playing" && game.invincible <= 0) {
+          let bestObstacle = null;
+          let bestClearance = Infinity;
+          for (const obstacle of row.obstacles) {
+            if (obstacle.hit) continue;
+            const clearance = Math.abs(game.laneX - obstacle.x) - (PLAYER_HALF_WIDTH + obstacle.halfW);
+            if (clearance > 0.001 && clearance <= NEAR_MISS_MARGIN && clearance < bestClearance) {
+              bestClearance = clearance;
+              bestObstacle = obstacle;
+            }
+          }
+          if (bestObstacle) awardNearMiss(bestObstacle, bestClearance);
         }
       }
 
@@ -5023,7 +5596,7 @@
 
     const distanceStep = game.speed * dt;
     game.distance += distanceStep;
-    game.score += distanceStep * speedMultiplier() * 2.15;
+    game.score += distanceStep * speedMultiplier() * 2.15 * comboScoreFactor();
 
     updateScenery(distanceStep);
     moveEntities(dt);
@@ -5039,9 +5612,7 @@
       safety++;
     }
 
-    if (game.hitFlash <= 0) {
-      /* Hit flash is purely cosmetic; no gameplay lockout beyond invincibility. */
-    }
+    tickCombo(dt);
   }
 
   function updateDying(dt) {
@@ -5131,6 +5702,7 @@
     const speedNorm = invLerp(SPEED_MIN, SPEED_MAX, game.speed);
     const blinkHidden = game.invincible > 0 && Math.floor(game.invincible * 18) % 2 === 0;
     if (blinkHidden) return;
+    meshRimDefault = 1.55;
 
     const idleBreath = Math.sin(game.visualTime * 1.13) * 0.0035;
     const pedalBob = Math.sin(game.crankAngle * 2) * (0.007 + game.speed * 0.00022);
@@ -5169,7 +5741,7 @@
 
     drawMesh(playerModels.body, PM.root, { specular: 0.08, tint });
 
-    const headPos = [0, 2.43, -0.3];
+    const headPos = [0, 2.62, -0.42];
     const headYaw = game.visual.headYaw;
     const headNod = game.visual.headNod;
     const headRoll = lean * 0.2;
@@ -5205,6 +5777,7 @@
     }
 
     drawScarfGeometry(tint);
+    meshRimDefault = 1;
   }
 
   function updatePlayerVisual(dt) {
@@ -5248,6 +5821,12 @@
       ? 0.65 + Math.sin(game.visualTime * 1.2) * 0.22
       : 0.38 + Math.sin(game.visualTime * 4.4) * 0.08 + speedNorm * 0.2;
     game.visual.wingFlutter = damp(game.visual.wingFlutter, flutterTarget, 3, dt);
+
+    game.featherTimer -= dt;
+    if (game.featherTimer <= 0) {
+      if (game.mode === "intro" || game.mode === "playing") emitFloatingFeather();
+      game.featherTimer = 1.3 + Math.random() * 1.6;
+    }
   }
 
   function updateCamera(dt) {
@@ -5256,11 +5835,11 @@
     camera.blend = damp(camera.blend, targetBlend, game.mode === "intro" ? 1.8 : 2.5, dt);
     const speedNorm = invLerp(SPEED_MIN, SPEED_MAX, game.speed);
     const introEye = [
-      -3.5 + Math.sin(world.time * 0.115) * 0.32,
-      2.58 + Math.sin(world.time * 0.31) * 0.035,
-      5.62 + Math.cos(world.time * 0.085) * 0.16
+      -4.0 + Math.sin(world.time * 0.115) * 0.3,
+      2.62 + Math.sin(world.time * 0.31) * 0.035,
+      4.7 + Math.cos(world.time * 0.085) * 0.14
     ];
-    const introTarget = [-0.7, 1.52, -0.78];
+    const introTarget = [-0.55, 1.6, -0.62];
     const chaseEye = [
       game.laneX * 0.64 + 1.04,
       4.62 + speedNorm * 0.18 + Math.sin(world.time * 2.2) * 0.012,
@@ -5660,6 +6239,14 @@
         rows: game.rows.length,
         fishItems: game.fishItems.length,
         invincible: game.invincible,
+        combo: game.combo,
+        comboTimer: game.comboTimer,
+        maxCombo: game.maxCombo,
+        nearMisses: game.nearMissCount,
+        activeRows: game.rows.map(row => ({
+          z: row.z,
+          blocked: row.obstacles.map(obstacle => obstacle.lane)
+        })),
         best: { ...best },
         fairness: game.fairnessLog.map(entry => ({
           index: entry.index,
@@ -5721,7 +6308,7 @@
       game.rows.length = 0;
       game.fishItems.length = 0;
       const rowZ = -13;
-      const row = { z: rowZ, previousZ: rowZ, openLanes: [1], obstacles: [] };
+      const row = { z: rowZ, previousZ: rowZ, openLanes: [1], obstacles: [], nearMissResolved: false };
       for (const lane of [0, 2]) {
         const kind = lane === 0 ? "crate" : "cone";
         const spec = OBSTACLE_SPECS[kind];
@@ -5745,10 +6332,44 @@
       camera.manual = true;
       updateHUD(true);
     },
+    stageNearMiss() {
+      game.mode = "playing";
+      game.rows.length = 0;
+      game.fishItems.length = 0;
+      game.speed = 7.2;
+      game.combo = 0;
+      game.comboTimer = 0;
+      game.maxCombo = 0;
+      game.nearMissCount = 0;
+      game.invincible = 0;
+      const rowZ = -0.01;
+      const row = { z: rowZ, previousZ: rowZ, openLanes: [0, 1], obstacles: [], nearMissResolved: false };
+      const kind = "cone";
+      const spec = OBSTACLE_SPECS[kind];
+      row.obstacles.push({
+        lane: 2,
+        x: LANE_CENTERS[2],
+        kind,
+        mesh: obstacleModels[kind],
+        halfW: spec.halfW,
+        halfD: spec.halfD,
+        shadowW: spec.shadowW,
+        shadowL: spec.shadowL,
+        hit: false
+      });
+      game.rows.push(row);
+      game.lane = 1;
+      game.laneX = LANE_CENTERS[2] - (PLAYER_HALF_WIDTH + spec.halfW) - 0.26;
+      game.lateralVelocity = 0;
+      camera.manual = true;
+      updateComboHud();
+      updateHUD(true);
+    },
     demoGameOver() {
       game.distance = 864;
       game.score = 2740;
       game.fishCount = 11;
+      game.maxCombo = 17;
       game.maxSpeed = 28.6;
       game.hearts = 0;
       game.mode = "playing";

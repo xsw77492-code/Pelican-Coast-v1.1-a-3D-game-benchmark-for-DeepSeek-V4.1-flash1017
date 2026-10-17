@@ -12,12 +12,22 @@
 沿着日落海岸线一直骑下去。
 
 - 三车道自动前进，控制速度与换道，躲开路障、木箱和路障锥
+- **擦身而过**：贴着障碍边缘通过会加分、积累连击，并触发金色粒子与风声音效
+- **连击**：小鱼和擦身都会积累 Combo，连击越高，全部得分越高；碰撞立即断连
 - 收集小鱼获得额外分数，速度越快得分倍率越高
 - 3 颗爱心；被撞后掉心、减速并短暂无敌
-- 结算显示距离、得分、小鱼与历史最佳；最佳成绩保存在浏览器本地
+- 结算显示距离、得分、小鱼、最高连击与历史最佳；最佳成绩保存在浏览器本地
 - 暂停、静音、重开；手机和平板会有触屏按钮
 
 ![Pelican Coast 游戏画面](screenshots/gameplay.jpg)
+
+![擦身而过与连击](screenshots/near-miss.jpg)
+
+## v1.1 更新
+
+- 新增擦身判定、连击 HUD、连击计分倍率和最高连击结算。
+- 重新制作鹈鹕：更长的 S 形颈部、羽毛领、收拢的翼羽、扇形尾羽、宽檐草帽与花饰、丝巾和尾部花束。
+- 眼周、腮红、草帽细节和暖色边缘光进一步调整，并加入缓慢飘落的羽毛粒子。
 
 ## 操作
 
@@ -78,6 +88,7 @@ python -m http.server 8080
 当前版本记录在 [EVALUATION.md](EVALUATION.md) 中：
 
 - 在完整需求下从零完成方案、3D 场景、角色、玩法、UI、音效和移动端适配
+- 自动化验证：擦身加分、连击 HUD、4.5 秒断连、碰撞断连、最高连击结算
 - 自动化验证：碰撞、掉心、死亡结算、暂停/恢复、重开、本地最高分
 - 自动化验证：连续 35 组障碍的路线可达性
 - 运行验证：Chrome + WebGL2，1440×900 下约 60 FPS，无控制台错误
@@ -94,6 +105,7 @@ window.__pelicanCoast.advance(5);          // 快进 5 秒玩法
 window.__pelicanCoast.setSpeed(24);        // 设置速度
 window.__pelicanCoast.setInvincible(999);  // 测试/演示用
 window.__pelicanCoast.moveLane(1);         // 左/右变道目标
+window.__pelicanCoast.stageNearMiss();     // 构造一次可控的擦身测试
 window.__pelicanCoast.pause();
 window.__pelicanCoast.resume();
 ```
