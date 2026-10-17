@@ -1,0 +1,26 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors and local settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencies and logs
+node_modules/
+*.log
+npm-debug.log*
+
+# Local environment and temporary files
+.env
+.env.*
+*.tmp
+
+# Local development and test output
+dev/
+shots/
+game-extracted.js
+tests/output/
