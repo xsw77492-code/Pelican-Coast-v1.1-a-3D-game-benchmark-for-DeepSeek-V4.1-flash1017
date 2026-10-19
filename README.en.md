@@ -3,7 +3,8 @@
 ### One HTML file. Zero dependencies. A 3D game built to test DeepSeek-V4.1-flash1017.
 
 > On the surface, it is a pelican riding a bicycle into a golden-hour coastline.  
-> Under the hood, it is a **232 KB, zero-dependency, single-file capability test** — built, shipped, and tested in a real browser.
+> Under the hood, it is a **256 KB, zero-dependency, single-file capability test** — built, shipped, and tested in a real browser.  
+> v2.0 is still strictly single-player: no online, no accounts, no leaderboard servers. Just a deeper game.
 
 [简体中文](README.md) · **English** · [GitHub repository](https://github.com/xsw77492-code/Pelican-Coast-v1.1-a-3D-game-benchmark-for-DeepSeek-V4.1-flash1017)
 
@@ -12,7 +13,7 @@
   <img alt="Renderer: native WebGL2" src="https://img.shields.io/badge/renderer-native%20WebGL2-2f9e8f?style=flat-square">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-f0a45e?style=flat-square">
   <img alt="Single HTML file" src="https://img.shields.io/badge/build-single%20HTML-ef8f72?style=flat-square">
-  <img alt="Version v1.1" src="https://img.shields.io/badge/version-v1.1-e98f72?style=flat-square">
+  <img alt="Version v2.0" src="https://img.shields.io/badge/version-v2.0-e98f72?style=flat-square">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-f3a47c?style=flat-square">
 </p>
 
@@ -42,13 +43,13 @@ This is the result: a straw-hatted pelican with a silk scarf, riding a teal bicy
 
 | | |
 | --- | --- |
-| Artifact | One `index.html`, about **232 KB**, zero runtime dependencies |
+| Artifact | One `index.html`, about **256 KB**, zero runtime dependencies |
 | Rendering | **Native WebGL2** with a hand-written math, shader, mesh, and particle stack |
-| Gameplay | Three lanes, speed control, fish pickups, combos, near misses, three hearts |
+| Gameplay | Three difficulties, wind boost, golden fish, moving crabs, combos, near misses, ranking |
 | Visuals | Procedural sunset coast, pelican rider, animated silk scarf, ocean, palms, lighthouse |
-| Platforms | Keyboard on desktop, touch controls on mobile, fully offline |
+| Platforms | Keyboard on desktop, touch controls on mobile, fully offline; strictly single-player |
 | Model | **DeepSeek-V4.1-flash1017** (this run) |
-| Verified | 60.2 FPS · 0 console errors · 35 obstacle rows with 0 fairness failures · mobile pass |
+| Verified | Stable ~60 FPS · 0 console errors · **37 obstacle rows, 0 fairness failures** · mobile pass |
 
 ## Play it
 
@@ -80,31 +81,49 @@ Once GitHub Pages is enabled, the game is playable there.
 | Accelerate | `W` / `↑` |
 | Brake / slow down | `S` / `↓` / `Space` |
 | Change lane | `A` `D` / `←` `→` |
+| Wind boost | `Shift` |
 | Pause / resume | `P` / `Esc` |
 | Mute | `M` |
 | Restart after game over | `R` / `Enter` |
 
-Touch devices automatically get left/right lane buttons, `slow`, and `go`.
+Touch devices automatically get left/right lane buttons, `slow`, `go`, and a wind boost button. Choose **Cruise / Classic / Gale** before starting.
 
 ## Screenshots
 
-![Gameplay](screenshots/gameplay.jpg)
+![V2 gameplay: crab, golden fish, and wind HUD](screenshots/gameplay.jpg)
 
 <p align="center">
-  <img src="screenshots/near-miss.jpg" width="100%" alt="Near miss and combo feedback">
+  <img src="screenshots/boost.jpg" width="100%" alt="Wind boost in Gale mode">
 </p>
 
-## What is in the game
+## What is in v2.0
 
-- **Three-lane speed runner**: dodge barriers, crates, and traffic cones while managing speed.
-- **Near misses**: squeeze past an obstacle for bonus points, combo, gold particles, and a whoosh.
-- **Combo chain**: fish and near misses build a combo. Miss the 4.5-second window and it drops; hit an obstacle and it resets instantly.
-- **Combo scoring**: higher combo multiplies all score, shown live in the HUD and recorded as max combo at the end of a run.
-- **Three hearts**: collisions cost a heart, slow the bike, and grant brief invincibility.
-- **Complete game loop**: title screen, countdown, play, pause, death, results, restart, local best score.
-- **Procedural coast**: animated ocean, sunset sky, palms, lighthouse, sailboats, birds, floating particles.
-- **Rebuilt pelican**: longer S-curved neck, feather collar, folded wing feathers, tail fan, wide straw hat with flowers, silk scarf, rear bouquet.
+- **Three difficulties**: Cruise / Classic / Gale, each with its own start speed, speed cap, hearts, obstacle density, and near-miss window.
+- **Wind boost**: fish and near misses fill a wind meter. At full, press `Shift` or tap the wind button for a 3.2-second burst of speed and score — with no invincibility. A crash ends it.
+- **Golden fish**: rare high-value pickups that grant extra score and wind, usually placed on a less obvious but safe route.
+- **Moving crab**: scuttles sideways inside its blocked lane, with a readable model; the generator still guarantees a reachable safe line.
+- **Per-mode best**: each difficulty stores its own best run; the HUD, title, and results show the active mode's record.
+- **S / A / B / C rank**: results score distance, max combo, near misses, golden fish, boosts, and fish.
+- **Complete loop**: title, difficulty select, countdown, play, pause, death, results, restart, local best.
+- **Procedural coast**: animated ocean, sunset sky, palms, lighthouse, sailboats, birds, floating particles, boost trails.
+- **Pelican v2**: longer S-curved neck, feather collar, rounded wings and tail fan, wide straw hat with flowers, silk scarf, blinking, a spread-wing boost pose, and rear bouquet.
 - **Desktop and mobile**: the same single file adapts to both, with touch controls on coarse pointers.
+
+### Difficulty tuning
+
+| Mode | Hearts | Speed cap | Obstacle density | Near-miss window | For |
+| --- | --- | --- | --- | --- | --- |
+| Cruise | 3 | 26 m/s | Relaxed | 0.90 m | First rides and sightseeing |
+| Classic | 3 | 31 m/s | Standard | 0.74 m | The intended experience |
+| Gale | 2 | 36 m/s | Dense | 0.58 m | High-score attempts |
+
+### Wind boost rules
+
+- Fish +10 wind, golden fish +26, near miss +18
+- At 100 wind, press `Shift` or tap the button
+- Boost raises the speed cap by ~16% and multiplies score by ×1.35
+- No invincibility. A collision ends the boost immediately
+- The wind meter survives a combo break, so you can save it for a safer stretch
 
 ## Why this is a hard model test
 
@@ -126,11 +145,17 @@ The full test log is in [EVALUATION.md](EVALUATION.md) (Chinese), with an Englis
 | Check | Result |
 | --- | --- |
 | Delivery | Single file, zero runtime dependencies, zero external assets |
-| Ready time | ~0.9 s |
-| Gameplay FPS @ 1440×900 | **60.2 FPS** |
+| Ready time | ~0.8 s |
+| Gameplay FPS @ 1440×900 | **stable ~60 FPS** (first sample includes load warm-up) |
 | Console errors | **0** |
 | WebGL errors | **0** |
-| Obstacle fairness | **35 rows, 0 unreachable safe lines** |
+| Obstacle fairness | **37 rows, 0 unreachable safe lines** |
+| Three difficulties: start / cap / hearts | Pass |
+| Wind fill / Shift boost / collision interrupt | Pass |
+| Golden fish spawn, pickup, reward | Pass |
+| Moving crab spawn / safe lane | Pass |
+| S / A / B / C rank | Pass |
+| Per-mode best scores | Pass |
 | Near-miss detection / score / VFX | Pass |
 | Combo build / 4.5 s expiry / hit reset | Pass |
 | Max combo in results | Pass |
@@ -138,7 +163,7 @@ The full test log is in [EVALUATION.md](EVALUATION.md) (Chinese), with an Englis
 | Pause / resume / restart | Pass |
 | Best score in `localStorage` | Pass |
 | Mobile 390 / 375 layouts | Pass, no horizontal overflow |
-| Mobile touch lane change | Pass |
+| Mobile touch lane change / boost | Pass |
 
 Environment:
 
@@ -146,15 +171,16 @@ Environment:
 Chrome + WebGL2
 ANGLE / Direct3D 11
 Intel UHD Graphics
-1440 × 900 / 60.2 FPS
+1440 × 900 / stable ~60 FPS
 ```
 
-## v1.0 → v1.1
+## v1.0 → v1.1 → v2.0
 
 This project was not a one-shot demo that was abandoned after generation.
 
 - **v1.0** delivered the coast, the rider, the game loop, the UI, audio, and mobile support.
-- **v1.1** added combo and near-miss gameplay, rebuilt the pelican model after feedback, and added a browser regression pass.
+- **v1.1** added combo and near-miss gameplay, rebuilt the pelican, and added a browser regression pass.
+- **v2.0** added three difficulties, wind boost, golden fish, a moving crab, per-mode bests, and S/A/B/C ranking; the pelican gained rounded feathers, blinking, and a boost pose.
 
 That iteration matters for a model evaluation: it tests not only first-pass generation, but whether the model can revise a working artifact, preserve correctness, and improve the experience.
 
@@ -164,12 +190,14 @@ That iteration matters for a model evaluation: it tests not only first-pass gene
 <summary><strong>Open the engine notes</strong></summary>
 
 - **Hand-written WebGL2 renderer**: matrix math, perspective projection, custom mesh builder, GLSL shaders, and a fixed render loop.
-- **Procedural geometry**: the pelican, bicycle, obstacles, palms, lighthouse, coastline, and fish are generated at boot.
-- **Animated silk scarf**: a custom cloth mesh updated every frame, with motion driven by speed, steering, and time.
+- **Procedural geometry**: the pelican, bicycle, obstacles, crab, palms, lighthouse, coastline, and fish are generated at boot.
+- **Animated silk scarf**: a custom cloth mesh updated every frame, with motion driven by speed, steering, boost, and time.
 - **Fixed 120 Hz simulation**: rendering and gameplay are decoupled. Even at low frame rates, movement does not tunnel through thin obstacles.
 - **Swept collision**: each obstacle is tested against the rider using the Z interval swept during the step.
-- **Fair obstacle generation**: at most two lanes are blocked per row; every safe lane from the previous row must be reachable with at most one lane change.
-- **Procedural audio**: ocean, wind, pickups, collisions, near misses, combo milestones, countdown, and results are synthesized with WebAudio.
+- **Fair obstacle generation**: at most two lanes are blocked per row; every safe lane from the previous row must be reachable with at most one lane change. The crab only sways inside its blocked lane.
+- **Difficulty curves**: three explicit sets of speed, hearts, density, near-miss window, and crab timing — no hidden adaptive difficulty.
+- **Wind system**: fish/near-miss charge, a timed speed burst, a separate score multiplier, and collision interruption.
+- **Procedural audio**: ocean, wind, pickups, collisions, near misses, combo milestones, wind-ready, boost, countdown, and results are synthesized with WebAudio.
 - **Responsive rendering**: capped device pixel ratio on small screens and a dedicated touch layer.
 - **Local persistence**: best score and mute preference use `localStorage`.
 
@@ -191,14 +219,18 @@ If you want to compare coding models:
 The page exposes a test-only object, `window.__pelicanCoast`:
 
 ```js
-window.__pelicanCoast.getState();          // state, combo, fairness log
+window.__pelicanCoast.getState();          // state, combo, wind, fairness
+window.__pelicanCoast.setDifficulty("gale"); // Cruise / Classic / Gale
 window.__pelicanCoast.start();
 window.__pelicanCoast.skipCountdown();
 window.__pelicanCoast.advance(5);          // fast-forward 5 seconds
-window.__pelicanCoast.setSpeed(24);
+window.__pelicanCoast.setWind(100);        // test a full wind meter
+window.__pelicanCoast.boost();             // trigger wind boost
 window.__pelicanCoast.setInvincible(999);  // tests / demos only
 window.__pelicanCoast.moveLane(1);
 window.__pelicanCoast.stageNearMiss();     // controlled near-miss scenario
+window.__pelicanCoast.stageGoldenFish();   // controlled golden-fish pickup
+window.__pelicanCoast.stageHazards();      // crab + golden fish showcase
 window.__pelicanCoast.pause();
 window.__pelicanCoast.resume();
 ```
@@ -207,8 +239,8 @@ This is not a stable public API; it exists for automated screenshots and gamepla
 
 ## Roadmap
 
-- **v1.2**: daily seeded challenge, more obstacle types, 60-second sprint mode
-- **v1.3**: unlockable bike paints, hats, and scarf colors
+- **v2.1**: daily fixed single-player seed, 60-second sprint; still no online
+- **v2.2**: more readable and dodgeable obstacle combinations, finer difficulty curves
 - **Later**: ghost replays, more coastlines, multi-model comparison write-ups
 
 ## Contributing
